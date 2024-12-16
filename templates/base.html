@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Practica1{% endblock %}</title>
+    
+    <!-- Enlace a Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Estilos adicionales -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            margin-bottom: 20px;
+        }
+        footer {
+            margin-top: 40px;
+            padding: 20px 0;
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">Practica1</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <!-- Productos -->
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint in ['index_product', 'add_product', 'edit_product'] %}active{% endif %}" href="{{ url_for('index_product') }}">Productos</a>
+                    </li>
+                    <!-- Clientes -->
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint in ['index_client', 'add_client', 'edit_client'] %}active{% endif %}" href="{{ url_for('index_client') }}">Clientes</a>
+                    </li>
+                    <!-- Categorías -->
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint in ['index_category', 'add_category', 'edit_category'] %}active{% endif %}" href="{{ url_for('index_category') }}">Categorías</a>
+                    </li>
+                    <!-- Detalles de Venta -->
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint in ['index_details', 'add_detail', 'edit_detail'] %}active{% endif %}" href="{{ url_for('index_details') }}">Detalles de Venta</a>
+                    </li>
+                    <!-- Facturas -->
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint in ['index_bills', 'add_bill', 'edit_bill'] %}active{% endif %}" href="{{ url_for('index_bills') }}">Facturas</a>
+                    </li>
+                    <!-- Métodos de Pago -->
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint in ['index_payment_methods', 'add_payment_method', 'edit_payment_method'] %}active{% endif %}" href="{{ url_for('index_payment_methods') }}">Métodos de Pago</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    {% if session.get('user_id') %}
+                        <li class="nav-item">
+                            <span class="navbar-text">
+                                Bienvenido, {{ session.get('user_name') }}
+                            </span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout') }}">Cerrar Sesión</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login') }}">Iniciar Sesión</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal de la página -->
+    <div class="container">
+        {% block content %}
+        <!-- Contenido específico de cada página -->
+        {% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <p>Practica 1 &copy; {{ current_year }}</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

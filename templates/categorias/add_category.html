@@ -1,0 +1,38 @@
+
+<!-- templates/categorias/add_category.html -->
+{% extends "base.html" %}
+
+{% block title %}Agregar Categoría{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Agregar Nueva Categoría</h1>
+    <form method="POST" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label for="categoryName" class="form-label">Nombre de Categoría</label>
+            <input type="text" class="form-control" id="categoryName" name="categoryName" pattern="^[a-zA-ZñÑ\s]+$" required>
+            <div class="invalid-feedback">Por favor, ingrese un nombre válido (solo letras).</div>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Descripción</label>
+            <input type="text" class="form-control" id="description" name="description">
+        </div>
+        <button type="submit" class="btn btn-success">Agregar</button>
+    </form>
+</div>
+<script>
+    (function () {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })()
+    })()
+</script>
+{% endblock %}

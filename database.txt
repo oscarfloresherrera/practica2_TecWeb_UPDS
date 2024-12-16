@@ -1,0 +1,137 @@
+
+postgres=# CREATE DATABASE practica1;
+CREATE DATABASE
+postgres=# \c practica1
+You are now connected to database "practica1" as user "postgres".
+practica1=# -- Crear tabla tbRoles
+practica1=# CREATE TABLE "tbRoles" (
+practica1(#     "PK_Role" SERIAL PRIMARY KEY,
+practica1(#     "roleName" VARCHAR(25) NOT NULL,
+practica1(#     "createdAt" DATE NOT NULL,
+practica1(#     "updatedAt" DATE,
+practica1(#     "state" BOOLEAN DEFAULT TRUE
+practica1(# );
+CREATE TABLE
+practica1=#
+practica1=# -- Crear tabla tbUsers
+practica1=# CREATE TABLE "tbUsers" (
+practica1(#     "PK_User" SERIAL PRIMARY KEY,
+practica1(#     "name" VARCHAR(20) NOT NULL,
+practica1(#     "lastName" VARCHAR(20) NOT NULL,
+practica1(#     "FK_Role" INTEGER REFERENCES "tbRoles"("PK_Role") ON DELETE CASCADE,
+practica1(#     "userName" VARCHAR(20) UNIQUE NOT NULL,
+practica1(#     "password" VARCHAR(20) NOT NULL,
+practica1(#     "createdAt" DATE NOT NULL,
+practica1(#     "updatedAt" DATE,
+practica1(#     "state" BOOLEAN DEFAULT TRUE
+practica1(# );
+CREATE TABLE
+practica1=#
+practica1=# -- Crear tabla tbClients
+practica1=# CREATE TABLE "tbClients" (
+practica1(#     "PK_client" SERIAL PRIMARY KEY,
+practica1(#     "firstName" VARCHAR(15) NOT NULL,
+practica1(#     "lastName" VARCHAR(15) NOT NULL,
+practica1(#     "address" VARCHAR(50),
+practica1(#     "birthDate" VARCHAR(30),
+practica1(#     "phoneNumber" BIGINT,
+practica1(#     "email" VARCHAR(30) UNIQUE,
+practica1(#     "createdAt" DATE NOT NULL,
+practica1(#     "updatedAt" DATE,
+practica1(#     "state" BOOLEAN DEFAULT TRUE
+practica1(# );
+CREATE TABLE
+practica1=#
+practica1=# -- Crear tabla tbPaymentMethods
+practica1=# CREATE TABLE "tbPaymentMethods" (
+practica1(#     "PK_paymentMethod" SERIAL PRIMARY KEY,
+practica1(#     "name" VARCHAR(20) NOT NULL,
+practica1(#     "anotherDetails" TEXT,
+practica1(#     "createdAt" DATE NOT NULL,
+practica1(#     "updatedAt" DATE,
+practica1(#     "state" BOOLEAN DEFAULT TRUE
+practica1(# );
+CREATE TABLE
+practica1=#
+practica1=# -- Crear tabla tbBills
+practica1=# CREATE TABLE "tbBills" (
+practica1(#     "PK_bill" SERIAL PRIMARY KEY,
+practica1(#     "FK_client" INTEGER REFERENCES "tbClients"("PK_client") ON DELETE CASCADE,
+practica1(#     "FK_paymentMethod" INTEGER REFERENCES "tbPaymentMethods"("PK_paymentMethod") ON DELETE CASCADE,
+practica1(#     "date" DATE NOT NULL,
+practica1(#     "createdAt" DATE NOT NULL,
+practica1(#     "updatedAt" DATE,
+practica1(#     "state" BOOLEAN DEFAULT TRUE
+practica1(# );
+CREATE TABLE
+practica1=#
+practica1=# -- Crear tabla tbCategories
+practica1=# CREATE TABLE "tbCategories" (
+practica1(#     "PK_category" SERIAL PRIMARY KEY,
+practica1(#     "cathegoryName" VARCHAR(20) NOT NULL,
+practica1(#     "description" VARCHAR(40),
+practica1(#     "createdAt" DATE NOT NULL,
+practica1(#     "updatedAt" DATE,
+practica1(#     "state" BOOLEAN DEFAULT TRUE
+practica1(# );
+CREATE TABLE
+practica1=#
+practica1=# -- Crear tabla tbProducts
+practica1=# CREATE TABLE "tbProducts" (
+practica1(#     "PK_product" SERIAL PRIMARY KEY,
+practica1(#     "FK_category" INTEGER REFERENCES "tbCategories"("PK_category") ON DELETE CASCADE,
+practica1(#     "name" VARCHAR(30) NOT NULL,
+practica1(#     "price" INTEGER NOT NULL,
+practica1(#     "stock" INTEGER NOT NULL,
+practica1(#     "createdAt" DATE NOT NULL,
+practica1(#     "updatedAt" DATE,
+practica1(#     "state" BOOLEAN DEFAULT TRUE
+practica1(# );
+CREATE TABLE
+practica1=#
+practica1=# -- Crear tabla tbDetails
+practica1=# CREATE TABLE "tbDetails" (
+practica1(#     "PK_detail" SERIAL PRIMARY KEY,
+practica1(#     "FK_bill" INTEGER REFERENCES "tbBills"("PK_bill") ON DELETE CASCADE,
+practica1(#     "FK_producto" INTEGER REFERENCES "tbProducts"("PK_product") ON DELETE CASCADE,
+practica1(#     "createdAt" DATE NOT NULL,
+practica1(#     "updatedAt" DATE,
+practica1(#     "state" BOOLEAN DEFAULT TRUE
+practica1(# );
+CREATE TABLE
+practica1=# -- Insertar roles en la tabla tbRoles
+ INSERT INTO "tbRoles" ("roleName", "createdAt", "updatedAt")
+VALUES
+('Administrador', '2024-12-14', NULL),
+('Gerente', '2024-12-14', NULL),
+('Empleado', '2024-12-14', NULL);
+INSERT 0 3
+practica1=#
+practica1=# -- Insertar usuarios en la tabla tbUsers
+INSERT INTO "tbUsers" ("name", "lastName", "FK_Role", "userName", "password", "createdAt", "updatedAt", "state")
+VALUES
+('Ana', 'González', 2, 'anagonzalez', '12345', '2024-12-14', NULL, TRUE),
+('Carlos', 'Lopez', 3, 'carloslopez', '12345', '2024-12-14', NULL, TRUE),
+('Juan', 'Pérez', 1, 'juanperez', '12345', '2024-12-14', NULL, TRUE),
+('Luis', 'García', 1, 'luisgarcia', '12345', '2024-12-14', NULL, TRUE);
+INSERT 0 4
+practica1=# -- Verificar roles
+practica1=# SELECT * FROM "tbRoles";
+ PK_Role |   roleName    | createdAt  | updatedAt | state
+---------+---------------+------------+-----------+-------
+       1 | Administrador | 2024-12-14 |           | t
+       2 | Gerente       | 2024-12-14 |           | t
+       3 | Empleado      | 2024-12-14 |           | t
+(3 rows)
+
+
+practica1=#
+practica1=# -- Verificar usuarios
+practica1=# SELECT * FROM "tbUsers";
+ PK_User |  name  | lastName | FK_Role |  userName   | password | createdAt  | updatedAt | state
+---------+--------+----------+---------+-------------+----------+------------+-----------+-------
+       1 | Ana    | González |       2 | anagonzalez | 12345    | 2024-12-14 |           | t
+       2 | Carlos | Lopez    |       3 | carloslopez | 12345    | 2024-12-14 |           | t
+       3 | Juan   | Pérez    |       1 | juanperez   | 12345    | 2024-12-14 |           | t
+       4 | Luis   | García   |       1 | luisgarcia  | 12345    | 2024-12-14 |           | t
+(4 rows)

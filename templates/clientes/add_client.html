@@ -1,0 +1,57 @@
+
+<!-- templates/clientes/add_client.html -->
+{% extends "base.html" %}
+
+{% block title %}Agregar Cliente{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Agregar Nuevo Cliente</h1>
+    <form method="POST" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label for="firstName" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" pattern="^[a-zA-ZñÑ\s]+$" required>
+            <div class="invalid-feedback">Por favor, ingrese un nombre válido (solo letras).</div>
+        </div>
+        <div class="mb-3">
+            <label for="lastName" class="form-label">Apellido</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" pattern="^[a-zA-ZñÑ\s]+$" required>
+            <div class="invalid-feedback">Por favor, ingrese un apellido válido (solo letras).</div>
+        </div>
+        <div class="mb-3">
+            <label for="address" class="form-label">Dirección</label>
+            <input type="text" class="form-control" id="address" name="address">
+        </div>
+        <div class="mb-3">
+            <label for="birthDate" class="form-label">Fecha de Nacimiento</label>
+            <input type="date" class="form-control" id="birthDate" name="birthDate">
+        </div>
+        <div class="mb-3">
+            <label for="phoneNumber" class="form-label">Teléfono</label>
+            <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" pattern="[0-9]+">
+            <div class="invalid-feedback">Por favor, ingrese un teléfono válido (solo números).</div>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+            <div class="invalid-feedback">Por favor, ingrese un email válido.</div>
+        </div>
+        <button type="submit" class="btn btn-success">Guardar</button>
+    </form>
+</div>
+<script>
+    (function () {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+{% endblock %}

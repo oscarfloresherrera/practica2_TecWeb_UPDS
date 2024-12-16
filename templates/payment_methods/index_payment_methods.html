@@ -1,0 +1,40 @@
+<!-- templates/metodos_pago/index_payment_methods.html -->
+{% extends "base.html" %}
+
+{% block title %}Métodos de Pago 1{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Métodos de Pago</h1>
+    <a href="{{ url_for('add_payment_method') }}" class="btn btn-primary mb-4">Agregar Método de Pago</a>
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Detalles Adicionales</th>
+                <th>Fecha de Creación</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for payment_method in payment_methods %}
+            <tr>
+                <td>{{ payment_method.PK_paymentMethod }}</td>
+                <td>{{ payment_method.name }}</td>
+                <td>{{ payment_method.anotherDetails }}</td>
+                <td>{{ payment_method.createdAt }}</td>
+                <td>{{ 'Activo' if payment_method.state else 'Inactivo' }}</td>
+                <td>
+                    <a href="{{ url_for('edit_payment_method', id=payment_method.PK_paymentMethod) }}" class="btn btn-warning btn-sm">Editar</a>
+                    <form action="{{ url_for('delete_payment_method', id=payment_method.PK_paymentMethod) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+Flask==2.3.2
+Flask-SQLAlchemy==2.5.1
+Flask-Login==0.6.2
+fpdf==1.7.2
+pdfkit==1.0.1
+SQLAlchemy==2.0.3
+pytest
+flask-testing
+pytest-flask
+pytest-cov

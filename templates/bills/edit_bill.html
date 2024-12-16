@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Factura{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Editar Factura</h1>
+    <form action="{{ url_for('edit_bill', id=bill.PK_bill) }}" method="POST" class="needs-validation" novalidate>
+        <!-- Token manual generado en la sesión -->
+        <input type="hidden" name="form_token" value="{{ form_token }}">
+
+        <!-- Búsqueda de Cliente -->
+        <div class="mb-3">
+            <label for="search_client" class="form-label">Buscar Cliente</label>
+            <input type="text" id="search_client" class="form-control" placeholder="Escribe para buscar un cliente..." autocomplete="off" aria-describedby="search_client_help">
+            <small id="search_client_help" class="form-text text-muted">Comienza a escribir para encontrar un cliente.</small>
+            <select class="form-select mt-2" id="FK_client" name="FK_client" required>
+                <option value="" disabled selected>Seleccionar Cliente</option>
+                {% for client in clients %}
+                    <option value="{{ client.PK_client }}" {% if client.PK_client == bill.FK_client %}selected{% endif %}>
+                        {{ client.firstName }} {{ client.lastName }}
+                    </option>
+                {% endfor %}
+            </select>
+            <div class="invalid-feedback">Por favor, selecciona un cliente.</div>
+        </div>
+
+        <!-- Método de Pago -->
+        <div class="mb-3">
+            <label for="FK_paymentMethod" class="form-label">Método de Pago</label>
+            <select class="form-select" id="FK_paymentMethod" name="FK_paymentMethod" required>
+                <option value="" disabled selected>Seleccionar Método de Pago</option>
+                {% for payment_method in payment_methods %}
+                    <option value="{{ payment_method.PK_paymentMethod }}" {% if payment_method.PK_paymentMethod == bill.FK_paymentMethod %}selected{% endif %}>
+                        {{ payment_method.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            <div class="invalid-feedback">Por favor, selecciona un método de pago.</div>
+        </div>
+
+        <!-- Selección de Productos -->
+        <div class="mb-3">
+            <label for="products" class="form-label">Productos</label>
+            <div>
+                {% for product in products %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="product_{{ product.PK_product }}" name="products" value="{{ product.PK_product }}" 
+                               {% if product.PK_product in selected_products %}checked{% endif %}>
+                        <label class="form-check-label" for="product_{{ product.PK_product }}">
+                            {{ product.name }} - {{ product.price }} Bs
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="invalid-feedback">Por favor, selecciona al menos un producto.</div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Actualizar Factura</button>
+        <a href="{{ url_for('index_bills') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+<script>
+    // Filtro de clientes mientras se escribe
+    document.getElementById("search_client").addEventListener("input", function () {
+        const searchValue = this.value.toLowerCase();
+        const clients = {{ clients|tojson }};
+        const selectClient = document.getElementById("FK_client");
+
+        selectClient.innerHTML = ""; // Limpiar opciones
+        let matchFound = false;
+
+        clients.forEach(client => {
+            const fullName = `${client.firstName} ${client.lastName}`.toLowerCase();
+            if (fullName.includes(searchValue)) {
+                const option = document.createElement("option");
+                option.value = client.PK_client;
+                option.textContent = `${client.firstName} ${client.lastName}`;
+                selectClient.appendChild(option);
+                matchFound = true;
+            }
+        });
+
+        // Mostrar mensaje si no hay coincidencias
+        if (!matchFound) {
+            const option = document.createElement("option");
+            option.value = "";
+            option.textContent = "No hay coincidencias";
+            option.disabled = true;
+            selectClient.appendChild(option);
+        }
+    });
+
+    (function () {
+        'use strict';
+        const forms = document.querySelectorAll('.needs-validation');
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
+{% endblock %}

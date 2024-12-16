@@ -1,0 +1,53 @@
+
+<!-- templates/productos/edit_product.html -->
+{% extends "base.html" %}
+
+{% block title %}Editar Producto{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Editar Producto</h1>
+    <form method="POST" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label for="name" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ product.name }}" pattern="^[a-zA-ZñÑ\s]+$" required>
+            <div class="invalid-feedback">Por favor, ingrese un nombre válido (solo letras).</div>
+        </div>
+        <div class="mb-3">
+            <label for="price" class="form-label">Precio</label>
+            <input type="number" class="form-control" id="price" name="price" value="{{ product.price }}" step="0.01" required>
+            <div class="invalid-feedback">Por favor, ingrese un precio válido.</div>
+        </div>
+        <div class="mb-3">
+            <label for="stock" class="form-label">Stock</label>
+            <input type="number" class="form-control" id="stock" name="stock" value="{{ product.stock }}" min="0" required>
+            <div class="invalid-feedback">Por favor, ingrese un stock válido (números positivos).</div>
+        </div>
+        <div class="mb-3">
+            <label for="category" class="form-label">Categoría</label>
+            <select class="form-select" id="category" name="category" required>
+                {% for category in categories %}
+                <option value="{{ category.PK_category }}" {% if category.PK_category == product.FK_category %}selected{% endif %}>{{ category.cathegoryName }}</option>
+                {% endfor %}
+            </select>
+            <div class="invalid-feedback">Por favor, seleccione una categoría.</div>
+        </div>
+        <button type="submit" class="btn btn-success">Actualizar</button>
+    </form>
+</div>
+<script>
+    (function () {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+{% endblock %}

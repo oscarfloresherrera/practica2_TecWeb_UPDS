@@ -1,0 +1,48 @@
+<!-- templates/detalles/add_detail.html -->
+{% extends "base.html" %}
+
+{% block title %}Agregar Detalle de Venta{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Agregar Detalle de Venta</h1>
+    <form action="{{ url_for('add_detail') }}" method="POST" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label for="FK_bill" class="form-label">Factura</label>
+            <select class="form-select" name="FK_bill" required>
+                <option value="" disabled selected>Seleccione una factura</option>
+                {% for bill in bills %}
+                <option value="{{ bill.PK_bill }}">{{ bill.name }}</option>
+                {% endfor %}
+            </select>
+            <div class="invalid-feedback">Por favor, seleccione una factura.</div>
+        </div>
+        <div class="mb-3">
+            <label for="FK_producto" class="form-label">Producto</label>
+            <select class="form-select" name="FK_producto" required>
+                <option value="" disabled selected>Seleccione un producto</option>
+                {% for product in products %}
+                <option value="{{ product.PK_product }}">{{ product.name }}</option>
+                {% endfor %}
+            </select>
+            <div class="invalid-feedback">Por favor, seleccione un producto.</div>
+        </div>
+        <button type="submit" class="btn btn-success">Guardar</button>
+    </form>
+</div>
+<script>
+    (function () {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })()
+    })()
+</script>
+{% endblock %}
